@@ -22,6 +22,8 @@
 #include <gdk/gdkwayland.h>
 #endif
 
+#include "mac-titlebar.h"
+
 #ifdef G_OS_UNIX
 #include <glib-unix.h>
 #include <gio/gunixinputstream.h>
@@ -220,7 +222,11 @@ static bool init_ui(zathura_t* zathura) {
     girara_error("Failed to initialize girara.");
     return false;
   }
-
+  
+  #ifdef GDK_WINDOWING_QUARTZ
+      setup_macos_window(GTK_WINDOW(zathura->ui.session->gtk.window));
+  #endif
+  
   /* girara events */
   zathura->ui.session->events.buffer_changed  = cb_buffer_changed;
   zathura->ui.session->events.unknown_command = cb_unknown_command;

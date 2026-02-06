@@ -1,4 +1,4 @@
-project('zathura', 'c',
+project('zathura', ['c', 'objc'],
   version: '2026.02.03',
   meson_version: '>=1.5',
   default_options: ['c_std=c17', 'warning_level=3'],
@@ -151,6 +151,7 @@ sources = files(
   'zathura/types.c',
   'zathura/utils.c',
   'zathura/zathura.c',
+  'zathura/mac-titlebar.m',
 )
 sources += zathura_resources
 
