@@ -94,6 +94,7 @@ zathura_t* zathura_create(void) {
   zathura->global.synctex_edit_modmask = GDK_CONTROL_MASK;
   zathura->global.highlighter_modmask  = GDK_SHIFT_MASK;
   zathura->global.double_click_follow  = true;
+  zathura->global.no_titlebar          = false;
 
   /* initialize with default paths */
   {
@@ -224,7 +225,10 @@ static bool init_ui(zathura_t* zathura) {
   }
   
   #ifdef GDK_WINDOWING_QUARTZ
+    printf("titlebar in zath.c: %s\n", zathura->global.no_titlebar ? "removed" : "original");
+    if (zathura->global.no_titlebar) {
       setup_macos_window(GTK_WINDOW(zathura->ui.session->gtk.window));
+    }
   #endif
   
   /* girara events */

@@ -58,7 +58,8 @@ static int run_synctex_forward(const char* synctex_fwd, const char* filename, in
 #endif
 
 static zathura_t* init_zathura(const char* config_dir, const char* data_dir, const char* cache_dir,
-                               const char* plugin_path, char** argv, const char* synctex_editor, Window embed) {
+                               const char* plugin_path, char** argv, const char* synctex_editor, Window embed,
+                               bool no_titlebar) {
   /* create zathura session */
   zathura_t* zathura = zathura_create();
   if (zathura == NULL) {
@@ -71,6 +72,8 @@ static zathura_t* init_zathura(const char* config_dir, const char* data_dir, con
   zathura_set_cache_dir(zathura, cache_dir);
   zathura_set_plugin_dir(zathura, plugin_path);
   zathura_set_argv(zathura, argv);
+
+  zathura->global.no_titlebar = no_titlebar;
 
   /* Init zathura */
   if (zathura_init(zathura) == false) {
@@ -103,6 +106,7 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
   g_autofree gchar* search_string  = NULL;
   gboolean forkback                = false;
   gboolean print_version           = false;
+  gboolean no_titlebar             = false;
   gint page_number                 = ZATHURA_PAGE_NUMBER_UNSPECIFIED;
   gint synctex_pid                 = -1;
   Window embed                     = 0;
@@ -128,6 +132,7 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
       {"bookmark", 'b', 0, G_OPTION_ARG_STRING, &bookmark_name, _("Bookmark to go to"), "bookmark"},
       {"find", 'f', 0, G_OPTION_ARG_STRING, &search_string, _("Search for the given phrase and display results"),
        "string"},
+      {"no-titlebar", 'T', 0, G_OPTION_ARG_NONE, &no_titlebar, _("Disable title bar on macOS"), NULL},
       {NULL, '\0', 0, 0, NULL, NULL, NULL},
   };
 
@@ -263,7 +268,7 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
 
   /* Create zathura session */
   g_autoptr(zathura_t) zathura =
-      init_zathura(config_dir, data_dir, cache_dir, plugin_path, argv, synctex_editor, embed);
+      init_zathura(config_dir, data_dir, cache_dir, plugin_path, argv, synctex_editor, embed, no_titlebar);
   if (zathura == NULL) {
     girara_error("Could not initialize zathura.");
     return -1;
