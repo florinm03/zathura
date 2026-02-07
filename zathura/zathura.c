@@ -225,7 +225,6 @@ static bool init_ui(zathura_t* zathura) {
   }
   
   #ifdef GDK_WINDOWING_QUARTZ
-    printf("titlebar in zath.c: %s\n", zathura->global.no_titlebar ? "removed" : "original");
     if (zathura->global.no_titlebar) {
       setup_macos_window(GTK_WINDOW(zathura->ui.session->gtk.window));
     }
